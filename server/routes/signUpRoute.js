@@ -22,7 +22,7 @@ export const signUpRoute = {
     const result = await db.collection("users").insertOne({
       email,
       passwordHash,
-      todos: ["Item1", "Item3"],
+      todos: [],
       isVerfied: false,
     });
 

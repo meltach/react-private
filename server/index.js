@@ -17,8 +17,13 @@ routes.forEach((route) => {
 //   res.send("Hello world!");
 // });
 
-initializeDbConnection().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Server is listening on port ${PORT}`);
-  });
+initializeDbConnection().then((err) => {
+  if (err) {
+    console.log("Unable to connect to Mongo.");
+    process.exit(1);
+  } else {
+    app.listen(PORT, () => {
+      console.log(`Server is listening on port ${PORT}`);
+    });
+  }
 });

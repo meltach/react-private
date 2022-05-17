@@ -8,7 +8,7 @@ import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import { useUser } from "../auth/useUser";
-import { Typography } from "@mui/material";
+//import { Typography } from "@mui/material";
 import axios from "axios";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -22,7 +22,7 @@ const Item = styled(Paper)(({ theme }) => ({
 const PersonalTodo = () => {
   const user = useUser();
   const { id } = user;
-  console.log(user);
+  //console.log(user);
   const [todoVal, setTodoVal] = useState("");
   //   const [groupProps, setGroupProps] = useState({
   //     appear: false,
@@ -44,19 +44,6 @@ const PersonalTodo = () => {
     setTodoVal(event.target.value);
   };
 
-  const addTodo = async (text) => {
-    const newTodo = {
-      todoId: new Date().getTime(),
-      text,
-    };
-    const response = await axios.post(`/api/todos/${id}`, {
-      todos: newTodo,
-    });
-    //const { todos } = response.data;
-    const currentTodos = response.data;
-    setTodoVal("");
-  };
-
   // useEffect(() => {
   //   addTodo();
   // }, []);
@@ -75,12 +62,26 @@ const PersonalTodo = () => {
 
     // setTodoItem([...filteredTodo]);
     const response = await axios.put(`/api/todos/${id}`, { todoId });
-    console.log(response.data);
+    // console.log(response.data);
+    getTodosFromDb();
   };
 
   // useEffect(() => {
   //   remove()
   // }, [addTodo]);
+  const addTodo = async () => {
+    const newTodo = {
+      todoId: new Date().getTime(),
+      text: todoVal,
+    };
+    const response = await axios.post(`/api/todos/${id}`, {
+      todos: newTodo,
+    });
+    //const { todos } = response.data;
+    const currentTodos = response.data;
+    getTodosFromDb();
+    setTodoVal("");
+  };
 
   useEffect(() => {
     getTodosFromDb();
@@ -99,10 +100,10 @@ const PersonalTodo = () => {
             fullWidth
             label="Your todo's"
             id="fullWidth"
-            value={todoVal.text}
+            value={todoVal}
             onChange={handleChange}
           />
-          <Button variant="outlined" onClick={() => addTodo(todoVal)}>
+          <Button variant="outlined" onClick={addTodo}>
             Add
           </Button>
           <Button
